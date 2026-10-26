@@ -1,0 +1,26 @@
+# --- Core Web Framework ---
+Flask
+
+# --- Database Connection ---
+Flask-MySQLdb
+mysqlclient
+
+# --- Email Support ---
+Flask-Mail
+
+# --- Additional Features (Scheduler & PDF) ---
+apscheduler
+fpdf
+
+# --- Mobile API (JWT & CORS) ---
+PyJWT
+flask-cors
+
+# --- Core Dependencies (Flask Internals) ---
+Werkzeug
+itsdangerous
+click
+Jinja2
+MarkupSafe
+reportslab
+qrcode

@@ -1,0 +1,16 @@
+\\<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "Delis Park Dashboard" }}</title>
+</head>
+<body>
+  <nav>
+    <a href="{{ url_for('admin_bp.admin_dashboard') }}">🏠 Dashboard</a>
+    <a href="{{ url_for('admin_bp.validasi_admin') }}">✅ Validasi</a>
+    <a href="{{ url_for('auth_bp.logout') }}">🚪 Logout</a>
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>

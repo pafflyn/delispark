@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Sesi Wahana</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'src/css/input.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'src/css/output.css') }}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.tailwindcss.css">
+</head>
+<body class="bg-white poppins-regular">
+
+  <div class="flex h-screen">
+    {% include 'UI-components/sidebar.html' %}
+    <main class="flex-1 h-screen overflow-y-auto bg-white p-10">
+      {% include 'UI-components/topbar.html' %}
+
+      <div class="container mx-auto">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="mb-6">
+              {% set category, message = messages[0] %}
+              <div class="px-4 py-3 rounded-lg font-semibold
+                {% if category == 'success' %}bg-green-100 text-green-700
+                {% else %}bg-red-100 text-red-700{% endif %}">
+                {{ message }}
+              </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+        <h1 class="text-2xl font-semibold mb-2">Sesi untuk Wahana: <span class="text-blue-900">{{ nama_wahana }}</span></h1>
+
+        <div class="mb-4 flex">
+          <a href="{{ url_for('sesi_bp.sesi_add', id_wahana=id_wahana) }}" class="inline-block ml-auto bg-green-600 text-white px-4 py-2 rounded">+ Tambah Sesi</a>
+        </div>
+
+        <div>
+          <table id="TableKelolaSesi">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Sesi</th>
+                <th>Kuota</th>
+                <th>Harga</th>
+                <th>Mulai</th>
+                <th>Selesai</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in sesi_list %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s.nama_sesi }}</td>
+                <td>{{ s.kuota }}</td>
+                <td>{{ s.harga }}</td>
+                <td>{{ s.waktu_mulai }}</td>
+                <td>{{ s.waktu_selesai }}</td>
+                <td>
+                  <a href="{{ url_for('sesi_bp.sesi_edit', id=s.id_sesi) }}" class="inline-block text-yellow-600 bg-yellow-50 px-3 py-1 rounded mr-2">Edit</a>
+                  <a href="{{ url_for('sesi_bp.sesi_delete', id=s.id_sesi) }}" class="inline-block text-red-600 bg-red-50 px-3 py-1 rounded"
+                     onclick="return confirm('Hapus sesi ini?')">Hapus</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.tailwindcss.com/"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.tailwindcss.js"></script>
+<script>
+    new DataTable('#TableKelolaSesi');
+</script>
+</html>

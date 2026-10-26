@@ -1,0 +1,19 @@
+# IDE / editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Root notes (not part of the projects)
+RANGKUMAN_KONEKSI_DPARK.txt
+
+# Safety net (also covered by each project's .gitignore)
+node_modules/
+__pycache__/
+*.pyc
+build/
+.dart_tool/
+*.log
+.env

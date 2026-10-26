@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservasi Saya</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='src/css/output.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='src/css/input.css') }}">
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.tailwindcss.css">
+
+  <style>
+    /* Opsional: Kustomisasi agar pagination DataTables terlihat lebih rapi */
+    .dt-search { margin-bottom: 1rem; }
+    .dt-length { margin-bottom: 1rem; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 poppins-regular antialiased">
+
+  {% include 'UI-components/navbar.html' %}
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    
+    <div class="flex flex-col md:flex-row justify-between items-center mb-28">
+      <h2 class="text-2xl font-bold text-gray-900">Daftar Reservasi</h2>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      
+      <div class="overflow-x-auto">
+        <h3 class="text-xl font-bold">Daftar Reservasi</h3>
+        <table id="tableReservasi" class="w-full whitespace-nowrap">
+          <thead class="bg-gray-50 text-gray-700 border-b border-gray-200">
+            <tr>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">No</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Nama Wahana</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Tanggal</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Sesi</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Jam</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Total Tiket</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Total Harga</th>
+              <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for r in reservasi or [] %}
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="py-3 px-4 text-sm text-gray-600">{{ loop.index }}</td>
+              <td class="py-3 px-4 text-sm font-medium text-gray-900">{{ r.nama_wahana }}</td>
+              <td class="py-3 px-4 text-sm text-gray-600">
+                {{ r.waktu_mulai.strftime("%Y-%m-%d") if r.waktu_mulai else '-' }}
+              </td>
+              <td class="py-3 px-4 text-sm text-gray-600">
+                {{ r.nama_sesi if r.nama_sesi is defined else '-' }}
+              </td>
+              <td class="py-3 px-4 text-sm text-gray-600">
+                {% if r.waktu_mulai and r.waktu_selesai %}
+                  {{ r.waktu_mulai.strftime("%H:%M") }} - {{ r.waktu_selesai.strftime("%H:%M") }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td class="py-3 px-4 text-sm text-gray-600">
+                {{ r.kuota if r.kuota is defined else '-' }}
+              </td>
+              <td class="py-3 px-4 text-sm font-medium text-gray-900">
+                Rp {{ "{:,.0f}".format(r.total_harga) }}
+              </td>
+              <td class="py-3 px-4">
+                {% if r.status_pembayaran == 'menunggu' %}
+                  <a href="{{ url_for('reservasi_bp.pembayaran_form', id_reservasi=r.id_reservasi) }}" 
+                    class="inline-block text-white bg-[#00013E] hover:bg-[#181966] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 transition-all">
+                    Bayar
+                  </a>
+                {% else %}
+                  <span class="text-green-600 font-semibold text-xs flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Selesai
+                  </span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div> </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.3.4/js/dataTables.tailwindcss.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      new DataTable('#tableReservasi', {
+        scrollX: true, 
+        language: {
+          search: "Cari:",
+          lengthMenu: "Tampilkan _MENU_ data",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+          paginate: {
+            first: "Awal",
+            last: "Akhir",
+            next: "Lanjut",
+            previous: "Kembali"
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
